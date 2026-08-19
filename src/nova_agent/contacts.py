@@ -20,14 +20,14 @@ _COUNTRY_CODE = "52"
 # in Meta webhooks, and in anything typed by hand.
 _MOBILE_PREFIX = _COUNTRY_CODE + "1"
 
-# The domain is spelled as repeated dot-prefixed labels rather than one
-# permissive class, because a class holding both '.' and word characters
-# overlaps with the '.' separating it: the engine then has many ways to
-# split the same domain and backtracks through them. On text a stranger
-# types into a chat window that is a denial-of-service vector, not a style
-# preference. Each repetition here starts with a literal dot, so there is
-# exactly one way to match any input.
-_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+# Every quantifier here is possessive, which is what makes the runtime linear:
+# a possessive quantifier never gives characters back, so the engine cannot
+# re-divide the same string looking for another way to match. Without them a
+# domain of many dot-separated labels has exponentially many valid splits, and
+# the input reaching this function is a chat message typed by a stranger --
+# which makes it a denial-of-service vector rather than a style preference.
+# Possessive quantifiers need Python 3.11, which this package already requires.
+_EMAIL_RE = re.compile(r"[\w.+-]++@[\w-]++(?:\.[\w-]++)++")
 # A digit run long enough to be a phone number, tolerating the separators people
 # actually type: spaces, dashes, dots, parentheses. It deliberately does not
 # require a digit at the end: the class already contains digits, so a trailing
