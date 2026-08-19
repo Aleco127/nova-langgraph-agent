@@ -37,3 +37,7 @@ select = ["E", "F", "I", "B", "UP", "SIM", "C4", "RUF"]
 pythonpath = ["src"]
 testpaths = ["tests"]
 addopts = "-q"
+# Warnings fail the build. With no third-party dependencies there is nothing
+# noisy to suppress, so anything raised here is ours -- and the first one this
+# caught was a docstring whose backslash escape had stopped being valid.
+filterwarnings = ["error"]

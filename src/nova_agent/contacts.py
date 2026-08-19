@@ -29,8 +29,13 @@ _MOBILE_PREFIX = _COUNTRY_CODE + "1"
 # exactly one way to match any input.
 _EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 # A digit run long enough to be a phone number, tolerating the separators people
-# actually type: spaces, dashes, dots, parentheses.
-_PHONE_CANDIDATE_RE = re.compile(r"\+?\d[\d\s().-]{8,18}\d")
+# actually type: spaces, dashes, dots, parentheses. It deliberately does not
+# require a digit at the end: the class already contains digits, so a trailing
+# \d would overlap with it and every near-miss would backtrack through all the
+# ways to divide the run. Trailing separators are harmless here because
+# canonical_phone strips everything that is not a digit before validating -- the
+# pattern only has to find candidates, not judge them.
+_PHONE_CANDIDATE_RE = re.compile(r"\+?\d[\d\s().-]{8,18}")
 
 
 def canonical_phone(raw: str | None) -> str | None:

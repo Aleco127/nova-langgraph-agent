@@ -104,3 +104,15 @@ def test_extraction_stays_fast_on_input_designed_to_backtrack() -> None:
     started = time.perf_counter()
     extract_contact(evil)
     assert time.perf_counter() - started < 1.0
+
+
+def test_phone_scanning_stays_fast_on_input_designed_to_backtrack() -> None:
+    r"""Same class of problem as the email pattern, same bound.
+
+    A long run of separators with no digit to close it is the shape that makes
+    an overlapping trailing \d backtrack through every possible division.
+    """
+    evil = "+52" + " -" * 400 + "x"
+    started = time.perf_counter()
+    extract_contact(evil)
+    assert time.perf_counter() - started < 1.0
