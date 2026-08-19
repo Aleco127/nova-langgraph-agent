@@ -127,3 +127,50 @@ Writing them also turned up two real bugs in the splitter: `str.rfind` returns
 chunk of `text[:-1]` and a leftover single character; and the break character
 was carried into the following chunk, so every message after the first began
 with a space.
+
+---
+
+## 5. What the gate found once it was actually enforcing
+
+With the exemption off, the first clean analysis reported one MAJOR issue
+(`python:S8786`): super-linear backtracking in the email pattern, and then the
+same in the phone pattern once the first was fixed.
+
+```python
+# before
+_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]{2,}")
+_PHONE_CANDIDATE_RE = re.compile(r"\+?\d[\d\s().-]{8,18}\d")
+```
+
+Both had a class overlapping with what follows it -- `.` on both sides of the
+literal dot in the first, `\d` on both sides of the trailing digit in the second
+-- so one input has many valid divisions and the engine walks through them. The
+input reaching these patterns is a chat message typed by a stranger, which makes
+this a denial-of-service vector rather than a style preference. Neither `ruff`
+nor 100% test coverage says anything about it: the tests all pass, quickly,
+because none of them sends the shape that triggers it.
+
+The phone pattern lost its trailing `\d`, which costs nothing because
+`canonical_phone` strips non-digits before validating. The email pattern took
+two attempts:
+
+```python
+# attempt 1 -- less backtracking, still flagged: a repeated group with its own
+# quantifier inside still admits many divisions
+r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"
+
+# attempt 2 -- linear, still flagged: Sonar's analyser appears to predate
+# Python 3.11 and read '++' as a nested quantifier rather than a possessive one
+r"[\w.+-]++@[\w-]++(?:\.[\w-]++)++"
+
+# final -- bounded, and bounded for a reason that outlives the analyser
+r"[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,8}"
+```
+
+RFC 5321 caps a local part at 64 characters and RFC 1035 caps each label at 63,
+so the bounds exclude nothing valid and the worst case is bounded by
+construction. Both forms measure identically on the pathological input, which
+two tests now assert.
+
+Final state on `main`: 0 bugs, 0 vulnerabilities, 0 code smells, 0 security
+hotspots, 100% coverage, and both `ignoredConditions: false`.

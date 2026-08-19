@@ -79,6 +79,16 @@ A pipeline that has only ever been green proves nothing about its gates.
    test passed -- each gate failed for its own reason and nothing else.
 3. **Green.** The same PR, after writing the tests and removing the dependency.
    Neither threshold was lowered.
+4. **What the New Code gate caught.** Eight untested lines in a repository
+   already at 100% leave the total at 95.38% -- above the floor, invisible to
+   it. The Sonar gate blocked; it had not, on the first attempt, because
+   SonarQube Cloud ignores coverage conditions on changes under 20 new lines by
+   default. With that off it also found super-linear backtracking in two regexes
+   parsing customer-supplied text, which neither `ruff` nor 100% coverage says
+   anything about.
+
+`main` currently reports 0 bugs, 0 vulnerabilities, 0 code smells and 0 security
+hotspots at 100% coverage.
 
 ## Running it
 
