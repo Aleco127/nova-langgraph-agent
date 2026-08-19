@@ -1,0 +1,459 @@
+Image build, vulnerability gate	Vulnerability gate	﻿2026-08-19T04:49:40.5253497Z ##[group]Run aquasecurity/trivy-action@v0.36.0
+with:
+  image-ref: nova-agent:28eac9c69aa89a5281002dee5a4e84b5bdc71577
+  scan-type: image
+  format: table
+  ignore-unfixed: true
+  severity: HIGH,CRITICAL
+  exit-code: 1
+  trivyignores: .trivyignore
+  scan-ref: .
+  vuln-type: os,library
+  cache-dir: /home/runner/work/nova-langgraph-agent/nova-langgraph-agent/.cache/trivy
+  list-all-pkgs: false
+  version: v0.70.0
+  cache: true
+  skip-setup-trivy: false
+  token-setup-trivy: ***
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[start-action display=Install Trivy;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy]
+##[group]Run aquasecurity/setup-trivy@3fb12ec12f41e471780db15c232d5dd185dcb514
+with:
+  version: v0.70.0
+  cache: true
+  token: ***
+  path: $HOME/.local/bin
+  github-server-url: https://github.com
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[start-action display=Binary dir;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.binary-dir]
+##[group]Run echo "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT
+[36;1mecho "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.binary-dir;outcome=success;conclusion=success;duration_ms=8]
+##[start-action display=Check the version for caching;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+##[start-action display=Restore Trivy binary from cache;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.cache]
+##[group]Run actions/cache/restore@9255dc7a253b0ccc959486e2bca901246202afeb
+with:
+  path: /home/runner/.local/bin/trivy-bin
+  key: trivy-binary-v0.70.0-Linux-X64
+  enableCrossOsArchive: false
+  fail-on-cache-miss: false
+  lookup-only: false
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+Cache hit for: trivy-binary-v0.70.0-Linux-X64
+Received 16777216 of 43744450 (38.4%), 16.0 MBs/sec
+Received 43744450 of 43744450 (100.0%), 34.3 MBs/sec
+Cache Size: ~42 MB (43744450 B)
+[command]/usr/bin/tar -xf /home/runner/work/_temp/23cd543b-f30a-4302-a188-f0df7e777c7c/cache.tzst -P -C /home/runner/work/nova-langgraph-agent/nova-langgraph-agent --use-compress-program unzstd
+Cache restored successfully
+Cache restored from key: trivy-binary-v0.70.0-Linux-X64
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.cache;outcome=success;conclusion=success;duration_ms=1999]
+##[start-action display=Checkout install script;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__actions_checkout]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__actions_checkout;outcome=skipped;conclusion=skipped;duration_ms=0]
+##[start-action display=Install Trivy;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run_2]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+##[start-action display=Add Trivy binary to $GITHUB_PATH;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run_3]
+##[group]Run echo /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH
+[36;1mecho /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__run_3;outcome=success;conclusion=success;duration_ms=11]
+##[start-action display=Save Trivy binary to cache;id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__actions_cache]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy.__actions_cache;outcome=skipped;conclusion=skipped;duration_ms=0]
+##[end-action id=__aquasecurity_trivy-action_2.__aquasecurity_setup-trivy;outcome=success;conclusion=success;duration_ms=2033]
+##[start-action display=Get current date;id=__aquasecurity_trivy-action_2.date]
+##[group]Run echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+[36;1mecho "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.date;outcome=success;conclusion=success;duration_ms=12]
+##[start-action display=Restore DB from cache;id=__aquasecurity_trivy-action_2.__actions_cache]
+##[group]Run actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
+with:
+  path: /home/runner/work/nova-langgraph-agent/nova-langgraph-agent/.cache/trivy
+  key: cache-trivy-2026-08-19
+  restore-keys: cache-trivy-
+  enableCrossOsArchive: false
+  fail-on-cache-miss: false
+  lookup-only: false
+  save-always: false
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+Cache not found for input keys: cache-trivy-2026-08-19, cache-trivy-
+##[end-action id=__aquasecurity_trivy-action_2.__actions_cache;outcome=success;conclusion=success;duration_ms=348]
+##[start-action display=Set GitHub Path;id=__aquasecurity_trivy-action_2.__run]
+##[group]Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+[36;1mecho "$GITHUB_ACTION_PATH" >> $GITHUB_PATH[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+  GITHUB_ACTION_PATH: /home/runner/work/_actions/aquasecurity/trivy-action/v0.36.0
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__run;outcome=success;conclusion=success;duration_ms=8]
+##[start-action display=Clear Trivy Envs file;id=__aquasecurity_trivy-action_2.__run_2]
+##[group]Run rm -f trivy_envs.txt
+[36;1mrm -f trivy_envs.txt[0m
+[36;1mtouch trivy_envs.txt[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__run_2;outcome=success;conclusion=success;duration_ms=9]
+##[start-action display=Set Trivy environment variables;id=__aquasecurity_trivy-action_2.__run_3]
+##[group]Run # Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.
+[36;1m# Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.[0m
+[36;1m# This limitation affects how we handle default values and empty inputs.[0m
+[36;1m# For more information, see: https://github.com/actions/runner/issues/924[0m
+[36;1m[0m
+[36;1m# The following logic implements the configuration priority described in the README:[0m
+[36;1m#[0m
+[36;1m# Inputs[0m
+[36;1m# Environment Variables[0m
+[36;1m# Config File[0m
+[36;1m# Defaults[0m
+[36;1m#[0m
+[36;1m# As noted above defaults are awkward to handle as GitHub Actions will inject those values as the input[0m
+[36;1m# if the caller doesn't provide them, thus if the input matches the default we don't set it as we[0m
+[36;1m# can't tell the difference.  Plus if we did set it when it was the default value then it could potentially[0m
+[36;1m# override an external environment variable, or something in the callers configuration file, which then wouldn't[0m
+[36;1m# match the configuration priority that is documented.[0m
+[36;1mset_env_var_if_provided() {[0m
+[36;1m  local var_name="$1"[0m
+[36;1m  local input_value="$2"[0m
+[36;1m  local default_value="$3"[0m
+[36;1m[0m
+[36;1m  if [ -n "$input_value" ] && [ "$input_value" != "$default_value" ]; then[0m
+[36;1m    # If action was provided with explicit input by the caller set that[0m
+[36;1m    # Use printf %q to safely escape special characters and prevent command injection[0m
+[36;1m    printf 'export %s=%q\n' "$var_name" "$input_value" >> trivy_envs.txt[0m
+[36;1m  fi[0m
+[36;1m}[0m
+[36;1m[0m
+[36;1m# Set environment variables, handling those with default values[0m
+[36;1m# cf. https://aquasecurity.github.io/trivy/latest/docs/configuration/#environment-variables[0m
+[36;1mset_env_var_if_provided "TRIVY_INPUT" "$INPUT_INPUT" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_EXIT_CODE" "$INPUT_EXIT_CODE" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_IGNORE_UNFIXED" "$INPUT_IGNORE_UNFIXED" "false"[0m
+[36;1mset_env_var_if_provided "TRIVY_PKG_TYPES" "$INPUT_VULN_TYPE" "os,library"[0m
+[36;1mset_env_var_if_provided "TRIVY_SEVERITY" "$INPUT_SEVERITY" "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"[0m
+[36;1mset_env_var_if_provided "TRIVY_FORMAT" "$INPUT_FORMAT" "table"[0m
+[36;1mset_env_var_if_provided "TRIVY_TEMPLATE" "$INPUT_TEMPLATE" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_OUTPUT" "$INPUT_OUTPUT" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_SKIP_DIRS" "$INPUT_SKIP_DIRS" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_SKIP_FILES" "$INPUT_SKIP_FILES" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_TIMEOUT" "$INPUT_TIMEOUT" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_IGNORE_POLICY" "$INPUT_IGNORE_POLICY" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_QUIET" "$INPUT_HIDE_PROGRESS" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_LIST_ALL_PKGS" "$INPUT_LIST_ALL_PKGS" "false"[0m
+[36;1mset_env_var_if_provided "TRIVY_SCANNERS" "$INPUT_SCANNERS" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_CONFIG" "$INPUT_TRIVY_CONFIG" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_TF_VARS" "$INPUT_TF_VARS" ""[0m
+[36;1mset_env_var_if_provided "TRIVY_DOCKER_HOST" "$INPUT_DOCKER_HOST" ""[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+  INPUT_INPUT: 
+  INPUT_EXIT_CODE: 1
+  INPUT_IGNORE_UNFIXED: true
+  INPUT_VULN_TYPE: os,library
+  INPUT_SEVERITY: HIGH,CRITICAL
+  INPUT_FORMAT: table
+  INPUT_TEMPLATE: 
+  INPUT_OUTPUT: 
+  INPUT_SKIP_DIRS: 
+  INPUT_SKIP_FILES: 
+  INPUT_TIMEOUT: 
+  INPUT_IGNORE_POLICY: 
+  INPUT_HIDE_PROGRESS: 
+  INPUT_LIST_ALL_PKGS: false
+  INPUT_SCANNERS: 
+  INPUT_TRIVY_CONFIG: 
+  INPUT_TF_VARS: 
+  INPUT_DOCKER_HOST: 
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__run_3;outcome=success;conclusion=success;duration_ms=10]
+##[start-action display=Run Trivy;id=__aquasecurity_trivy-action_2.__run_4]
+##[group]Run entrypoint.sh
+[36;1mentrypoint.sh[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+  INPUT_SCAN_TYPE: image
+  INPUT_IMAGE_REF: nova-agent:28eac9c69aa89a5281002dee5a4e84b5bdc71577
+  INPUT_SCAN_REF: .
+  INPUT_TRIVYIGNORES: .trivyignore
+  INPUT_GITHUB_PAT: 
+  INPUT_LIMIT_SEVERITIES_FOR_SARIF: 
+  TRIVY_CACHE_DIR: /home/runner/work/nova-langgraph-agent/nova-langgraph-agent/.cache/trivy
+##[endgroup]
+Found ignorefile '.trivyignore':
+# Every entry here needs a reason and a review date. A bare CVE id with no
+# justification is how a vulnerability gate quietly stops being a gate.
+#
+# Format:
+#   CVE-YYYY-NNNNN  # why it does not apply here -- review: YYYY-MM-DD
+#
+# Empty on purpose: the runtime image installs no OS packages beyond the
+# python:3.12-slim base, so nothing has needed an exception yet.
+Running Trivy with options: trivy image nova-agent:28eac9c69aa89a5281002dee5a4e84b5bdc71577
+2026-08-19T04:49:43Z	INFO	[vuln] Vulnerability scanning is enabled
+2026-08-19T04:49:43Z	INFO	[secret] Secret scanning is enabled
+2026-08-19T04:49:43Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2026-08-19T04:49:43Z	INFO	[secret] Please see https://trivy.dev/docs/v0.70/guide/scanner/secret#recommendation for faster secret detection
+2026-08-19T04:49:43Z	INFO	Detected OS	family="debian" version="13.6"
+2026-08-19T04:49:43Z	INFO	[debian] Detecting vulnerabilities...	os_version="13" pkg_num=87
+2026-08-19T04:49:43Z	INFO	Number of language-specific files	num=1
+2026-08-19T04:49:43Z	INFO	[python-pkg] Detecting vulnerabilities...
+2026-08-19T04:49:43Z	WARN	Using severities from other vendors for some vulnerabilities. Read https://trivy.dev/docs/v0.70/guide/scanner/vulnerability#severity-selection for details.
+
+Report Summary
+
+┌───────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┬─────────┐
+│                                  Target                                   │    Type    │ Vulnerabilities │ Secrets │
+├───────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ nova-agent:28eac9c69aa89a5281002dee5a4e84b5bdc71577 (debian 13.6)         │   debian   │        9        │    -    │
+├───────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ Python                                                                    │ python-pkg │        2        │    -    │
+├───────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ opt/venv/lib/python3.12/site-packages/nova_agent-0.1.0.dist-info/METADATA │ python-pkg │        0        │    -    │
+├───────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ opt/venv/lib/python3.12/site-packages/pip-26.2.1.dist-info/METADATA       │ python-pkg │        0        │    -    │
+├───────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┼─────────┤
+│ usr/local/lib/python3.12/site-packages/pip-25.0.1.dist-info/METADATA      │ python-pkg │        0        │    -    │
+└───────────────────────────────────────────────────────────────────────────┴────────────┴─────────────────┴─────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+For OSS Maintainers: VEX Notice
+--------------------------------
+If you're an OSS maintainer and Trivy has detected vulnerabilities in your project that you believe are not actually exploitable, consider issuing a VEX (Vulnerability Exploitability eXchange) statement.
+VEX allows you to communicate the actual status of vulnerabilities in your project, improving security transparency and reducing false positives for your users.
+Learn more and start using VEX: https://trivy.dev/docs/v0.70/guide/supply-chain/vex/repo#publishing-vex-documents
+
+To disable this notice, set the TRIVY_DISABLE_VEX_NOTICE environment variable.
+
+
+nova-agent:28eac9c69aa89a5281002dee5a4e84b5bdc71577 (debian 13.6)
+=================================================================
+Total: 9 (HIGH: 9, CRITICAL: 0)
+
+┌───────────────┬────────────────┬──────────┬────────┬─────────────────────────┬──────────────────┬────────────────────────────────────────────┐
+│    Library    │ Vulnerability  │ Severity │ Status │    Installed Version    │  Fixed Version   │                   Title                    │
+├───────────────┼────────────────┼──────────┼────────┼─────────────────────────┼──────────────────┼────────────────────────────────────────────┤
+│ bsdutils      │ CVE-2026-53615 │ HIGH     │ fixed  │ 1:2.41-5                │ 2.41.5-0+deb13u1 │ [Integer Overflow or Wraparound in         │
+│               │                │          │        │                         │                  │ libblkid/src/partitions/dos.c]             │
+│               │                │          │        │                         │                  │ https://avd.aquasec.com/nvd/cve-2026-53615 │
+├───────────────┤                │          │        ├─────────────────────────┤                  │                                            │
+│ libblkid1     │                │          │        │ 2.41-5                  │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        │                         │                  │                                            │
+│ liblastlog2-2 │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        │                         │                  │                                            │
+│ libmount1     │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        │                         │                  │                                            │
+│ libsmartcols1 │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        │                         │                  │                                            │
+│ libuuid1      │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        ├─────────────────────────┤                  │                                            │
+│ login         │                │          │        │ 1:4.16.0-2+really2.41-5 │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        ├─────────────────────────┤                  │                                            │
+│ mount         │                │          │        │ 2.41-5                  │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+├───────────────┤                │          │        │                         │                  │                                            │
+│ util-linux    │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+│               │                │          │        │                         │                  │                                            │
+└───────────────┴────────────────┴──────────┴────────┴─────────────────────────┴──────────────────┴────────────────────────────────────────────┘
+
+Python (python-pkg)
+===================
+Total: 2 (HIGH: 2, CRITICAL: 0)
+
+┌────────────┬─────────────────────┬──────────┬────────┬───────────────────┬───────────────┬────────────────────────────────────────────────────────┐
+│  Library   │    Vulnerability    │ Severity │ Status │ Installed Version │ Fixed Version │                         Title                          │
+├────────────┼─────────────────────┼──────────┼────────┼───────────────────┼───────────────┼────────────────────────────────────────────────────────┤
+│ msgpack    │ GHSA-6v7p-g79w-8964 │ HIGH     │ fixed  │ 1.1.2             │ 1.2.1         │ MessagePack for Python: Out-of-bounds read / crash on  │
+│            │                     │          │        │                   │               │ Unpacker reuse after a...                              │
+│            │                     │          │        │                   │               │ https://github.com/advisories/GHSA-6v7p-g79w-8964      │
+├────────────┼─────────────────────┤          │        ├───────────────────┼───────────────┼────────────────────────────────────────────────────────┤
+│ setuptools │ CVE-2025-47273      │          │        │ 70.3.0            │ 78.1.1        │ setuptools: Path Traversal Vulnerability in setuptools │
+│            │                     │          │        │                   │               │ PackageIndex                                           │
+│            │                     │          │        │                   │               │ https://avd.aquasec.com/nvd/cve-2025-47273             │
+└────────────┴─────────────────────┴──────────┴────────┴───────────────────┴───────────────┴────────────────────────────────────────────────────────┘
+##[error]Process completed with exit code 1.
+##[end-action id=__aquasecurity_trivy-action_2.__run_4;outcome=failure;conclusion=failure;duration_ms=105]
+##[start-action display=Remove Trivy Envs file;id=__aquasecurity_trivy-action_2.__run_5]
+##[group]Run rm -f trivy_envs.txt
+[36;1mrm -f trivy_envs.txt[0m
+shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+env:
+  PYTHON_VERSION: 3.12
+  COVERAGE_FLOOR: 95
+  IMAGE: nova-agent
+  CODEQL_ACTION_JOB_RUN_UUID: f95a4f00-1e1c-4e73-8a2d-a1fd48615686
+  CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+  CODEQL_ACTION_FEATURE_SANDWICH: false
+  CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+  CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+  CODEQL_ACTION_VERSION: 4.37.7
+  CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:image
+  CODEQL_WORKFLOW_STARTED_AT: 2026-08-19T04:49:34.012Z
+  CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY: CODEQL_UPLOAD_SARIF_TRIVY_IMAGE__TRIVY
+##[endgroup]
+##[end-action id=__aquasecurity_trivy-action_2.__run_5;outcome=success;conclusion=success;duration_ms=9]
+Image build, vulnerability gate	Post Vulnerability gate	﻿2026-08-19T04:49:43.0884231Z Post job cleanup.
+##[start-action display=Restore DB from cache;id=__a2987552-e70d-434f-b8ff-210da2231ca9.__actions_cache]
+##[end-action id=__a2987552-e70d-434f-b8ff-210da2231ca9.__actions_cache;outcome=skipped;conclusion=skipped;duration_ms=0]
+##[start-action display=Install Trivy;id=__a2987552-e70d-434f-b8ff-210da2231ca9.__aquasecurity_setup-trivy]
+Post job cleanup.
+##[end-action id=__a2987552-e70d-434f-b8ff-210da2231ca9.__aquasecurity_setup-trivy;outcome=success;conclusion=success;duration_ms=15]
