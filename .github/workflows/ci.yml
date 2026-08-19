@@ -95,6 +95,20 @@ jobs:
           echo "$output"
           echo "$output" | grep -q '"focus": "paginas-web"'
 
+      - name: Smoke test the graph inside the image
+        # The deterministic mode above never builds the graph, so it would pass
+        # against an image where the graph fails to assemble -- a missing
+        # dependency, an edge pointing at a node that is not there. This replays
+        # a turn end to end: first draft quotes a price that is not in the
+        # catalog, the validator rejects it, the second one ships.
+        run: |
+          output=$(docker run --rm "${IMAGE}:${GITHUB_SHA}" "cuanto cuesta el bot" \
+            --replay 'Te lo dejo en $1,800.' \
+            --replay 'El setup es de $2,499 y son 650 pesos al mes.')
+          echo "$output"
+          echo "$output" | grep -q '"attempts": 2'
+          echo "$output" | grep -q '"awaiting_human": false'
+
       # Two scans on purpose. This one always succeeds so the SARIF report is
       # produced and uploaded even when the gate below is about to fail --
       # otherwise the run that most needs a report is the one without one.
