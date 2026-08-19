@@ -1,0 +1,8 @@
+# Every entry here needs a reason and a review date. A bare CVE id with no
+# justification is how a vulnerability gate quietly stops being a gate.
+#
+# Format:
+#   CVE-YYYY-NNNNN  # why it does not apply here -- review: YYYY-MM-DD
+#
+# Empty on purpose: the runtime image installs no OS packages beyond the
+# python:3.12-slim base, so nothing has needed an exception yet.
