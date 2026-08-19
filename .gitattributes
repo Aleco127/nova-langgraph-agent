@@ -1,0 +1,4 @@
+# The runners are Linux. Checking these out with CRLF breaks the container
+# build and anything the workflow pipes through a shell.
+* text=auto eol=lf
+*.png binary
