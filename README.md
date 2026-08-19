@@ -4,6 +4,7 @@
 [![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](docs/quality-gates.md)
 [![gate](https://img.shields.io/badge/coverage%20floor-95%25-blue)](.github/workflows/ci.yml)
 [![trivy](https://img.shields.io/badge/trivy-HIGH%2FCRITICAL%20blocking-blue)](.github/workflows/ci.yml)
+[![Quality gate](https://sonarcloud.io/api/project_badges/measure?project=Aleco127_nova-langgraph-agent&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Aleco127_nova-langgraph-agent)
 
 A conversational sales agent modelled as an explicit state machine, and a
 pipeline whose quality gates actually block a merge.
@@ -44,6 +45,13 @@ external service involved. The suite reports 100%; the floor sits at 95 because
 pinning a gate to the current number turns every guard clause into a build
 failure, and a team that cannot add one without writing a ceremonial test
 learns to bypass the gate instead.
+
+Coverage is gated twice, and the two catch different things. The floor above is
+absolute and cannot see a repository that sits comfortably above it while
+absorbing untested code; SonarQube Cloud measures Coverage on New Code, which is
+computed against the change rather than the total. `sonar.qualitygate.wait=true`
+makes the workflow block on the verdict instead of firing the analysis and
+moving on.
 
 **Vulnerabilities.** Trivy, `--severity HIGH,CRITICAL --exit-code 1
 --ignore-unfixed`. That last flag is the difference between a gate people
