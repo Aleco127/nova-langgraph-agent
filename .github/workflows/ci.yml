@@ -86,7 +86,7 @@ jobs:
       # produced and uploaded even when the gate below is about to fail --
       # otherwise the run that most needs a report is the one without one.
       - name: Scan for report
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ env.IMAGE }}:${{ github.sha }}
           scan-type: image
@@ -104,7 +104,7 @@ jobs:
           category: trivy-image
 
       - name: Vulnerability gate
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ env.IMAGE }}:${{ github.sha }}
           scan-type: image
