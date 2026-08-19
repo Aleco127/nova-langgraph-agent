@@ -20,14 +20,14 @@ _COUNTRY_CODE = "52"
 # in Meta webhooks, and in anything typed by hand.
 _MOBILE_PREFIX = _COUNTRY_CODE + "1"
 
-# Every quantifier here is possessive, which is what makes the runtime linear:
-# a possessive quantifier never gives characters back, so the engine cannot
-# re-divide the same string looking for another way to match. Without them a
-# domain of many dot-separated labels has exponentially many valid splits, and
-# the input reaching this function is a chat message typed by a stranger --
-# which makes it a denial-of-service vector rather than a style preference.
-# Possessive quantifiers need Python 3.11, which this package already requires.
-_EMAIL_RE = re.compile(r"[\w.+-]++@[\w-]++(?:\.[\w-]++)++")
+# Every quantifier is bounded, which is what keeps the runtime linear: an
+# unbounded one lets a long domain be divided many ways and the engine walks
+# through the divisions before giving up. The bounds are not arbitrary --
+# RFC 5321 caps a local part at 64 characters and RFC 1035 caps each label at
+# 63 -- so nothing valid is excluded by them. This matters because the input
+# is a chat message typed by a stranger, which makes an unbounded pattern a
+# denial-of-service vector rather than a style preference.
+_EMAIL_RE = re.compile(r"[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,8}")
 # A digit run long enough to be a phone number, tolerating the separators people
 # actually type: spaces, dashes, dots, parentheses. It deliberately does not
 # require a digit at the end: the class already contains digits, so a trailing
