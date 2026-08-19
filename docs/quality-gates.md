@@ -76,3 +76,54 @@ Legend:
 - '-': Not scanned
 - '0': Clean (no security findings detected)
 ```
+
+---
+
+## 4. The case the absolute floor cannot see
+
+Run 32268728097, [PR #2](../../pull/2). Eight new lines with no tests, in a
+repository whose overall coverage was already at 100%. The total lands at
+**95.38%**, above the 95% floor, so `--cov-fail-under` passes and reports
+nothing wrong. That is not a flaw in the floor -- it is arithmetic. A codebase
+comfortably above its threshold absorbs untested code without ever dipping
+below it, and the larger the codebase the more it can absorb.
+
+Coverage on New Code is measured against the change instead of the total, which
+is why both gates exist:
+
+```
+new_lines_to_cover = 8    new_uncovered_lines = 8    new_coverage = 0.0
+ERROR  new_coverage  LT  80  actual=0.0
+QUALITY GATE STATUS: FAILED  (sonar-scanner exit code 3)
+```
+
+### It did not block on the first attempt
+
+The first run of this same pull request passed, with the API reporting the
+contradiction plainly:
+
+```
+new_coverage  status=OK  comparator=LT  errorThreshold=80  actualValue=0.0
+"ignoredConditions": true
+```
+
+The cause is a SonarQube Cloud default: conditions on coverage and duplication
+are ignored until a change reaches **20 new lines**. This change had 16. The
+setting is inherited from the organisation and applies to every new project, so
+a gate can look configured, report a green check, and quietly let untested code
+through as long as it arrives in small enough commits -- which is the size of an
+ordinary commit.
+
+Switched off under Quality Gate, "Ignore duplication and coverage on small
+changes". `ignoredConditions` then reads `false` and the gate blocks. Worth
+knowing that it is on by default, because the failure mode is a gate that
+reports success.
+
+### Green
+
+Run 32268987420, after writing the tests. Coverage on New Code 0% -> 100%.
+Writing them also turned up two real bugs in the splitter: `str.rfind` returns
+-1 when the window contains no space, so a word longer than the limit produced a
+chunk of `text[:-1]` and a leftover single character; and the break character
+was carried into the following chunk, so every message after the first began
+with a space.
