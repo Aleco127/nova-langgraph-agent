@@ -7,10 +7,21 @@ name = "nova-agent"
 version = "0.1.0"
 description = "Conversational sales agent modelled as a LangGraph state machine"
 requires-python = ">=3.11"
-# Deliberately empty. Everything in this milestone is pure stdlib, which is what
-# lets the whole suite run in the CI container with no install step beyond the
-# package itself. The graph dependencies arrive with the LangGraph milestone.
-dependencies = []
+# Both pins are exact. LangGraph reached 1.x recently enough that "compatible
+# release" ranges still cross API moves, and a graph that silently rewires
+# itself on a transitive upgrade is the kind of failure the test suite would
+# report as a logic bug. Transitive packages stay on ranges so a security
+# release can land without editing this file -- which matters, because the
+# vulnerability gate scans every one of them.
+dependencies = [
+    "langgraph==1.2.11",
+    "langchain-core==1.6.0",
+    # Not pinned: it is langchain-core's own dependency and this project only
+    # touches it through the model base class. A range lets a security release
+    # land without a lockstep bump here -- which matters, because the
+    # vulnerability gate scans it either way.
+    "pydantic>=2.7.4,<3",
+]
 
 [project.optional-dependencies]
 dev = [
