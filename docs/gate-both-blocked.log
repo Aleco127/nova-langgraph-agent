@@ -1,0 +1,16 @@
+# Run 32217585750 -- pull request #1, both gates blocking
+
+## Coverage gate
+src/nova_agent/__init__.py         1      0   100%
+src/nova_agent/__main__.py        29      0   100%
+src/nova_agent/contacts.py        45      0   100%
+src/nova_agent/escalation.py      31     31     0%   8-71
+src/nova_agent/intent.py          37      0   100%
+src/nova_agent/state.py           22      0   100%
+TOTAL                            165     31    81%
+FAIL Required test coverage of 95% not reached. Total coverage: 81.21%
+65 passed in 0.16s
+
+## Vulnerability gate
+Total: 1 (HIGH: 1, CRITICAL: 0)
+│ setuptools (METADATA) │ CVE-2025-47273 │ HIGH     │ fixed  │ 70.3.0            │ 78.1.1        │ setuptools: Path Traversal Vulnerability in setuptools │
