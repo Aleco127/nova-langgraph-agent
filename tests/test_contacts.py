@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import time
+
 import pytest
 
 from nova_agent.contacts import Contact, canonical_phone, extract_contact, phone_variants
@@ -87,3 +89,18 @@ def test_missing_text_is_not_an_error(text: str | None) -> None:
 
 def test_a_contact_with_only_an_email_is_not_empty() -> None:
     assert not Contact(email="hola@zook.mx").is_empty
+
+
+def test_extraction_stays_fast_on_input_designed_to_backtrack() -> None:
+    """A regex with overlapping classes can be made to run for minutes.
+
+    The input below is the shape that triggers it: a long local part, then a
+    domain of many dot-separated labels that never completes. Anyone who can
+    send the agent a message can send this, so the bound is a real one and not
+    a micro-benchmark. The threshold is generous on purpose -- the point is
+    linear versus super-linear, not milliseconds.
+    """
+    evil = "a" * 64 + "@" + "a." * 64
+    started = time.perf_counter()
+    extract_contact(evil)
+    assert time.perf_counter() - started < 1.0

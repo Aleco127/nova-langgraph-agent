@@ -20,7 +20,14 @@ _COUNTRY_CODE = "52"
 # in Meta webhooks, and in anything typed by hand.
 _MOBILE_PREFIX = _COUNTRY_CODE + "1"
 
-_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]{2,}")
+# The domain is spelled as repeated dot-prefixed labels rather than one
+# permissive class, because a class holding both '.' and word characters
+# overlaps with the '.' separating it: the engine then has many ways to
+# split the same domain and backtracks through them. On text a stranger
+# types into a chat window that is a denial-of-service vector, not a style
+# preference. Each repetition here starts with a literal dot, so there is
+# exactly one way to match any input.
+_EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 # A digit run long enough to be a phone number, tolerating the separators people
 # actually type: spaces, dashes, dots, parentheses.
 _PHONE_CANDIDATE_RE = re.compile(r"\+?\d[\d\s().-]{8,18}\d")
