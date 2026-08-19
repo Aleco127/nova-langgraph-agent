@@ -11,7 +11,6 @@ COPY src/ ./src/
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --upgrade pip && \
     /opt/venv/bin/pip install . && \
-    /opt/venv/bin/pip install "setuptools==70.3.0" && \
     # The installer comes back out once there is nothing left to install. This
     # is a security change, not housekeeping: pip vendors its own copies of
     # msgpack and setuptools, and those two accounted for the Python-side HIGH
