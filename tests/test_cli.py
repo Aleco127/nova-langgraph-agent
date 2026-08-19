@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from nova_agent.__main__ import build_state, main
+from nova_agent.__main__ import EXIT_AWAITING_HUMAN, build_state, main
 from nova_agent.intent import Directive, LeadFocus, SalesStage
 
 
@@ -81,7 +81,7 @@ def test_replay_reports_a_turn_that_stopped_for_a_human(
     """``needs_human`` comes from the node that is still waiting, so on a paused
     turn the state says False. The pause itself is the answer, and the output
     has to say so or an operator reads "handled"."""
-    main(["quiero hablar con una persona", "--replay", "x"])
+    assert main(["quiero hablar con una persona", "--replay", "x"]) == EXIT_AWAITING_HUMAN
     payload = json.loads(capsys.readouterr().out)
     assert payload["awaiting_human"] is True
     assert payload["needs_human"] is True
@@ -124,3 +124,14 @@ def test_the_deterministic_mode_reports_no_graph_fields(
     payload = json.loads(capsys.readouterr().out)
     assert "reply" not in payload
     assert "awaiting_human" not in payload
+
+
+def test_a_delivered_turn_and_a_handed_over_one_are_told_apart_by_exit_code(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A bulk replay needs to count hand-overs without parsing every line of
+    JSON, and a hand-over is not a crash -- so it gets its own code rather than
+    the generic 1."""
+    assert main(["cuanto cuesta", "--replay", "Son $2,499."]) == 0
+    assert main(["cuanto cuesta", "--replay", "Somos una IA."]) == EXIT_AWAITING_HUMAN
+    capsys.readouterr()

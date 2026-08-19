@@ -113,6 +113,13 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
+# A turn that stopped for a person did not fail -- the graph did exactly what it
+# was built to do -- but it did not answer the customer either, and a script
+# replaying conversations in bulk needs to tell those two apart without parsing
+# the JSON. 3 rather than 1, which reads as a crash, or 2, which argparse owns.
+EXIT_AWAITING_HUMAN = 3
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _parser()
     args = parser.parse_args(argv)
@@ -128,7 +135,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.replay:
         state = run_replay(state, args.replay)
     print(_as_json(state))
-    return 0
+    return EXIT_AWAITING_HUMAN if state.get("__interrupt__") else 0
 
 
 if __name__ == "__main__":  # pragma: no cover - exercised through the container
