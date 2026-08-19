@@ -12,9 +12,13 @@ import re
 from nova_agent.state import ConversationState
 
 # Asking for a human, in the ways people actually ask.
+# The article is optional and either gender. Written as "(?:una\s+)?" this
+# matched "hablar con una persona" and "hablar con asesor" but not "hablar con
+# un asesor" -- which is how people actually say it, and which therefore went
+# to the sales script instead of to a person.
 _HUMAN_REQUEST_RE = re.compile(
-    r"hablar\s+con\s+(?:una\s+)?(?:persona|humano|alguien|asesor)"
-    r"|me\s+pasas?\s+con\s+|quiero\s+un\s+(?:asesor|ejecutivo|gerente)"
+    r"hablar\s+con\s+(?:un[ao]?\s+)?(?:persona|humano|alguien|asesor|ejecutivo|gerente)"
+    r"|me\s+pasas?\s+con\s+|quiero\s+un[ao]?\s+(?:asesor|ejecutivo|gerente|persona)"
     r"|eres\s+un\s+bot",
     re.IGNORECASE,
 )
