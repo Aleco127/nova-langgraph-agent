@@ -30,6 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Sonar reads git blame to work out which lines are new. A shallow
+          # clone has no blame, so New Code comes out empty and the gate passes
+          # by having nothing to measure.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v7
         with:
@@ -61,6 +66,14 @@ jobs:
           name: coverage-xml
           path: coverage.xml
           if-no-files-found: error
+
+      # Runs in this job because it needs the coverage.xml the step above
+      # produced. Reports relative decline -- new code arriving without tests --
+      # which the absolute floor cannot see.
+      - name: SonarQube Cloud scan and quality gate
+        uses: SonarSource/sonarqube-scan-action@v8.2.1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   image:
     name: Image build, vulnerability gate
