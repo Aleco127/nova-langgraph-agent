@@ -174,3 +174,85 @@ two tests now assert.
 
 Final state on `main`: 0 bugs, 0 vulnerabilities, 0 code smells, 0 security
 hotspots, 100% coverage, and both `ignoredConditions: false`.
+
+---
+
+## 6. The LangGraph milestone: what the gates said, and what they did not
+
+Worth recording honestly, because the interesting result is a negative one.
+
+**The vulnerability gate did not fire, and it was expected to.** Adding
+`langgraph` and `langchain-core` pulled 33 transitive packages into the runtime
+image -- `pydantic`, `pydantic-core`, `httpx`, `langsmith`, `orjson`,
+`ormsgpack`, `requests`, `urllib3`, `zstandard` and the rest -- and the image
+grew from 188 MB to 278 MB. The plan listed "Trivy finds CVEs in the new
+dependency tree" as the second most likely risk, with the mitigation being a
+version bump rather than a suppression.
+
+It came back clean on the first scan: 0 HIGH, 0 CRITICAL, `.trivyignore` still
+empty. Current releases of that tree simply have no unpatched high-severity
+findings today. The gate is unchanged and will catch the next one; this entry
+exists so the absence is on the record rather than reported as a save.
+
+**The coverage gate held without being touched.** The milestone added eight
+modules (`graph`, `nodes`, `validation`, `catalog`, `tools`, `prompts`,
+`replay`, `checkpointing`) and grew two more. The floor stayed at 95 and the
+suite went from 110 tests to 225, ending at 100% across 464 statements.
+
+**What actually found the defects was the test suite.** Four, all of them
+behavioural rather than anything a linter reports:
+
+| Defect | Found by |
+|---|---|
+| Tool router read the tail of a list `add_messages` reorders, silently halving the tool ceiling | `test_a_model_stuck_asking_for_tools_is_cut_off` |
+| A full state sent into an existing thread erases its checkpointed history, silently | `test_the_second_turn_can_see_the_first` |
+| `$2499` parsed as `$249`, so the validator rejected the agent's own catalog prices | `test_amounts_are_read_out_of_the_shapes_replies_actually_use` |
+| Escalation matched "hablar con una persona" but not "hablar con un asesor" | `test_escalation_reason_names_the_rule_that_fired` |
+
+The third and fourth are the ones worth dwelling on. Both are in pure functions
+that already had 100% line coverage before the milestone started -- the lines
+ran, the branch that mattered was never given the input that exposes it. A
+coverage gate proves that code was executed; it says nothing about whether it
+was executed with the values that break it. That is the honest limit of the
+number in the badge.
+
+## 7. A finding the scanners were never going to report
+
+While wiring the checkpointer, LangGraph logged this on every turn:
+
+```
+Deserializing unregistered type nova_agent.contacts.Contact from checkpoint.
+This will be blocked in a future version. Set LANGGRAPH_STRICT_MSGPACK=true to
+block now, or add to allowed_msgpack_modules to allow explicitly.
+```
+
+Following it to `JsonPlusSerializer` turns up the reason, in the library's own
+docstring:
+
+> It should not be used on untrusted python objects. If an attacker can write
+> directly to your checkpoint database, they may be able to trigger code
+> execution when data is deserialized.
+
+The default is permissive: the deserialiser rebuilds whatever type the stored
+record names. For this agent the checkpoint store is a database of customer
+conversations, which is not a component worth assuming stays trusted -- it is
+reachable from an application bug, a leaked connection string, or a backup
+restored from the wrong place.
+
+`checkpointing.py` now passes an explicit allowlist of the four project types
+that ever enter a checkpoint. A test proves the restriction is real rather than
+decorative: a type outside the list comes back as a plain dict, with its
+constructor never called.
+
+```python
+permissive = JsonPlusSerializer()
+blob = permissive.dumps_typed({"x": NotOurs("rm -rf /")})
+
+assert isinstance(permissive.loads_typed(blob)["x"], NotOurs)  # rebuilt
+assert build_serializer().loads_typed(blob)["x"] == {"payload": "rm -rf /"}  # inert
+```
+
+Neither Trivy nor SonarCloud reports this. It is not a CVE -- the library is
+behaving as documented -- and it is not a code smell. It surfaced because a log
+line was read instead of filtered out, which is the part of "DevSecOps" that no
+gate performs for you.

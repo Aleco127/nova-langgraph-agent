@@ -113,3 +113,18 @@ def extract_contact(text: str | None) -> Contact:
             break
 
     return Contact(phone=phone, email=email)
+
+
+def merge_contacts(known: Contact, found: Contact) -> Contact:
+    """Fold what this message revealed into what the thread already knew.
+
+    The newer value wins per field, which is the behaviour a correction needs:
+    a customer who mistypes a digit and sends the number again in the next
+    message expects the second one to stick. Fields the message says nothing
+    about are left alone -- a turn that mentions an email must not erase the
+    phone number collected three turns ago.
+    """
+    return Contact(
+        phone=found.phone or known.phone,
+        email=found.email or known.email,
+    )

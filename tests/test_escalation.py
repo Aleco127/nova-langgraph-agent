@@ -118,3 +118,20 @@ def test_a_state_with_no_history_key_is_handled() -> None:
 
 def test_a_state_with_no_message_key_is_handled() -> None:
     assert not should_escalate({})
+
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "quiero hablar con un asesor",
+        "quiero hablar con una asesor",
+        "puedo hablar con un ejecutivo?",
+        "hablar con un gerente por favor",
+        "quiero una persona real",
+    ],
+)
+def test_the_article_does_not_decide_whether_a_person_is_sent(message: str) -> None:
+    """The pattern accepted "hablar con una persona" and "hablar con asesor" but
+    not "hablar con un asesor", which is how people actually type it. Those leads
+    stayed with the sales script after asking twice to leave it."""
+    assert wants_human(message) is True
